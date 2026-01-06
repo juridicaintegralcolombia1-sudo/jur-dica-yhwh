@@ -22,9 +22,9 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: '#0d1b2a', // Deep Navy
-                        secondary: '#c5a059', // Muted Luxury Gold
-                        accent: '#1b263b', // Professional Slate
+                        primary: '#0d1b2a', 
+                        secondary: '#c5a059', 
+                        accent: '#1b263b', 
                         legalBlue: '#0f172a'
                     },
                     fontFamily: {
@@ -61,9 +61,22 @@
 <script type="importmap">
 {
   "imports": {
-    "react/": "https://esm.sh/react@^19.2.3/",
     "react": "https://esm.sh/react@^19.2.3",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.3/"
+    "react-dom": "https://esm.sh/react-dom@^19.2.3",
+    "react-dom/client": "https://esm.sh/react-dom@^19.2.3/client",
+    "./App": "./App.tsx",
+    "./components/Navbar": "./components/Navbar.tsx",
+    "./components/Hero": "./components/Hero.tsx",
+    "./components/Services": "./components/Services.tsx",
+    "./components/About": "./components/About.tsx",
+    "./components/ContactForm": "./components/ContactForm.tsx",
+    "./components/Footer": "./components/Footer.tsx",
+    "./components/WhatsAppButton": "./components/WhatsAppButton.tsx",
+    "./components/JuridicoView": "./components/JuridicoView.tsx",
+    "./components/InmobiliarioView": "./components/InmobiliarioView.tsx",
+    "./hooks/useScrollReveal": "./hooks/useScrollReveal.ts",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/"
   }
 }
 </script>
@@ -71,6 +84,7 @@
 </head>
 <body class="font-sans text-gray-900 bg-white overflow-x-hidden selection:bg-secondary selection:text-white">
     <div id="root"></div>
+    <script type="module" src="index.tsx"></script>
 <script type="module" src="/index.tsx"></script>
 </body>
 </html>
