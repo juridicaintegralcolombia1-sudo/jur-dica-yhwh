@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { View } from '../App';
+import { View } from '../App.tsx';
 
 interface JuridicoViewProps {
   onNavigate: (view: View) => void;
