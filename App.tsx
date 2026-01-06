@@ -1,27 +1,26 @@
 
 import React, { useState, useEffect } from 'react';
-import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import Services from './components/Services';
-import About from './components/About';
-import ContactForm from './components/ContactForm';
-import Footer from './components/Footer';
-import WhatsAppButton from './components/WhatsAppButton';
-import JuridicoView from './components/JuridicoView';
-import InmobiliarioView from './components/InmobiliarioView';
-import useScrollReveal from './hooks/useScrollReveal';
+import Navbar from './components/Navbar.tsx';
+import Hero from './components/Hero.tsx';
+import Services from './components/Services.tsx';
+import About from './components/About.tsx';
+import ContactForm from './components/ContactForm.tsx';
+import Footer from './components/Footer.tsx';
+import WhatsAppButton from './components/WhatsAppButton.tsx';
+import JuridicoView from './components/JuridicoView.tsx';
+import InmobiliarioView from './components/InmobiliarioView.tsx';
+import useScrollReveal from './hooks/useScrollReveal.ts';
 
 export type View = 'home' | 'juridico' | 'inmobiliario';
 
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<View>('home');
   
-  // Use our custom scroll reveal hook
+  // Inicializar animaciones de scroll
   useScrollReveal();
 
-  // Scroll to top when changing view
   useEffect(() => {
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [currentView]);
 
   const navigate = (view: View) => {
@@ -36,7 +35,7 @@ const App: React.FC = () => {
         {currentView === 'home' && (
           <>
             <Hero onNavigate={navigate} />
-            <Services onNavigate={navigate} />
+            <Services />
             <About />
             <ContactForm />
           </>
