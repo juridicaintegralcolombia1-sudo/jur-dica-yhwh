@@ -35,7 +35,7 @@
     <!-- Polyfills para compatibilidad de módulos -->
     <script async src="https://ga.jspm.io/npm:es-module-shims@1.7.0/dist/es-module-shims.js"></script>
 
-    <!-- Import Map LIMPIO Y UNIFICADO (Solo React 18.2.0) -->
+    <!-- IMPORT MAP CORREGIDO: Sin duplicidad de versiones -->
     <script type="importmap">
 {
   "imports": {
@@ -48,7 +48,7 @@
 }
 </script>
     
-    <!-- Babel Standalone para transpilar JSX/TSX en el navegador -->
+    <!-- Babel Standalone -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 </head>
 <body class="font-sans text-gray-900 bg-white">
@@ -62,33 +62,30 @@
     <div id="error-console"></div>
     <div id="root"></div>
 
-    <!-- Script de Inicio: Carga el archivo index.tsx directamente -->
-    <script type="text/babel" data-presets="react,typescript" src="index.tsx"></script>
+    <!-- SCRIPT CORREGIDO: Se añade data-type="module" para que soporte los imports -->
+    <script type="text/babel" data-presets="react,typescript" data-type="module" src="index.tsx"></script>
 
     <script>
-        // Lógica de emergencia para quitar el loader si algo falla o tarda demasiado
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                const loader = document.getElementById('loading-screen');
-                if (loader) {
-                    loader.style.opacity = '0';
-                    setTimeout(() => loader.remove(), 500);
-                }
-            }, 6000); 
-        });
-
-        window.onerror = function(message, source, lineno, colno, error) {
-            console.error("Error Global:", message, "en", source, ":", lineno);
-            const consoleBox = document.getElementById('error-console');
-            if(consoleBox) {
-                consoleBox.style.display = 'block';
-                consoleBox.innerHTML = `<strong>Error Detectado:</strong> ${message}<br><small>Archivo: ${source}:${lineno}</small><br><p>Por favor, recarga la página (Ctrl+F5).</p>`;
-            }
+        // Función para ocultar el cargador
+        const hideLoader = () => {
             const loader = document.getElementById('loading-screen');
             if (loader) {
                 loader.style.opacity = '0';
                 setTimeout(() => loader.remove(), 500);
             }
+        };
+
+        // Respaldo: Si en 8 segundos no ha cargado, forzar la salida del loader
+        setTimeout(hideLoader, 8000);
+
+        window.onerror = function(message, source, lineno, colno, error) {
+            console.error("Error Global:", message);
+            const consoleBox = document.getElementById('error-console');
+            if(consoleBox) {
+                consoleBox.style.display = 'block';
+                consoleBox.innerHTML = `<strong>Error:</strong> ${message}<br><small>Archivo: ${source}:${lineno}</small>`;
+            }
+            hideLoader();
         };
     </script>
 </body>
