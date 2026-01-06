@@ -35,15 +35,15 @@
     <!-- Polyfills para compatibilidad de módulos -->
     <script async src="https://ga.jspm.io/npm:es-module-shims@1.7.0/dist/es-module-shims.js"></script>
 
-    <!-- Import Map Consistente (React 18) -->
+    <!-- Import Map LIMPIO (Solo React 18.2.0 para estabilidad total) -->
     <script type="importmap">
 {
   "imports": {
     "react": "https://esm.sh/react@18.2.0",
     "react-dom": "https://esm.sh/react-dom@18.2.0",
     "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
-    "react/": "https://esm.sh/react@^19.2.3/"
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/"
   }
 }
 </script>
@@ -68,12 +68,21 @@
         import ReactDOM from 'react-dom/client';
         import App from './App.tsx';
 
+        const hideLoader = () => {
+            const loader = document.getElementById('loading-screen');
+            if (loader) {
+                loader.style.opacity = '0';
+                setTimeout(() => loader.remove(), 500);
+            }
+        };
+
         // Captura de errores para diagnóstico
         window.onerror = function(message, source, lineno, colno, error) {
-            const console = document.getElementById('error-console');
-            if(console) {
-                console.style.display = 'block';
-                console.innerHTML = `<strong>Error:</strong> ${message}<br><small>Archivo: ${source}:${lineno}</small>`;
+            hideLoader(); // Quitar el loader si hay error para ver el mensaje
+            const consoleBox = document.getElementById('error-console');
+            if(consoleBox) {
+                consoleBox.style.display = 'block';
+                consoleBox.innerHTML = `<strong>Error Detectado:</strong> ${message}<br><small>Origen: ${source}:${lineno}</small>`;
             }
         };
 
@@ -81,25 +90,13 @@
             const root = ReactDOM.createRoot(document.getElementById('root'));
             root.render(<App />);
             
-            // Ocultar loader
-            window.addEventListener('load', () => {
-                const loader = document.getElementById('loading-screen');
-                if (loader) {
-                    loader.style.opacity = '0';
-                    setTimeout(() => loader.remove(), 500);
-                }
-            });
+            // Forzar ocultar loader cuando React termine de montar
+            setTimeout(hideLoader, 1500);
             
-            // Caso de seguridad por si el evento load ya pasó
-            setTimeout(() => {
-                const loader = document.getElementById('loading-screen');
-                if (loader) {
-                    loader.style.opacity = '0';
-                    setTimeout(() => loader.remove(), 500);
-                }
-            }, 2000);
+            window.addEventListener('load', hideLoader);
         } catch (e) {
             console.error("Error al renderizar:", e);
+            hideLoader();
         }
     </script>
 </body>
