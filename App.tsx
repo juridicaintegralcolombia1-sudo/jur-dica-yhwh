@@ -16,11 +16,12 @@ export type View = 'home' | 'juridico' | 'inmobiliario';
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<View>('home');
   
-  // Inicializar animaciones de scroll
+  // Hook personalizado para animaciones
   useScrollReveal();
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Scroll al tope con cada cambio de vista
+    window.scrollTo({ top: 0, behavior: 'auto' });
   }, [currentView]);
 
   const navigate = (view: View) => {
@@ -33,20 +34,24 @@ const App: React.FC = () => {
       
       <main className="flex-grow">
         {currentView === 'home' && (
-          <>
+          <div className="animate-in fade-in duration-700">
             <Hero onNavigate={navigate} />
             <Services />
             <About />
             <ContactForm />
-          </>
+          </div>
         )}
         
         {currentView === 'juridico' && (
-          <JuridicoView onNavigate={navigate} />
+          <div className="animate-in slide-in-from-right duration-500">
+            <JuridicoView onNavigate={navigate} />
+          </div>
         )}
         
         {currentView === 'inmobiliario' && (
-          <InmobiliarioView onNavigate={navigate} />
+          <div className="animate-in slide-in-from-right duration-500">
+            <InmobiliarioView onNavigate={navigate} />
+          </div>
         )}
       </main>
 
