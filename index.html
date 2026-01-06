@@ -29,11 +29,12 @@
         .fade-in.visible { opacity: 1; transform: translateY(0); }
         .glass-header { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
         #loading-screen { position: fixed; inset: 0; background: #0d1b2a; display: flex; align-items: center; justify-content: center; z-index: 9999; transition: opacity 0.5s ease; }
-        #error-console { display: none; position: fixed; top: 10px; left: 10px; right: 10px; background: #fee2e2; border: 1px solid #ef4444; padding: 20px; color: #b91c1c; z-index: 10000; font-family: sans-serif; border-radius: 8px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); overflow-wrap: break-word; }
+        #error-console { display: none; position: fixed; top: 20px; left: 20px; right: 20px; background: #fff5f5; border: 2px solid #c53030; padding: 25px; color: #742a2a; z-index: 10000; font-family: system-ui; border-radius: 12px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2); }
     </style>
 
     <script async src="https://ga.jspm.io/npm:es-module-shims@1.7.0/dist/es-module-shims.js"></script>
 
+    <!-- IMPORT MAP CORREGIDO Y VALIDADO PARA REACT 18.2.0 -->
     <script type="importmap">
 {
   "imports": {
@@ -48,38 +49,54 @@
 </script>
     
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-<link rel="stylesheet" href="/index.css">
 </head>
 <body class="font-sans text-gray-900 bg-white">
     <div id="loading-screen">
         <div class="text-white text-center">
             <div class="w-12 h-12 border-4 border-secondary border-t-transparent rounded-full animate-spin mb-4 mx-auto"></div>
-            <p class="font-serif tracking-widest uppercase text-xs">Cargando Plataforma YHWH...</p>
+            <p class="font-serif tracking-widest uppercase text-xs">Iniciando Plataforma YHWH...</p>
         </div>
     </div>
 
     <div id="error-console"></div>
     <div id="root"></div>
 
-    <script type="text/babel" data-presets="react,typescript" data-type="module" src="index.tsx"></script>
+    <!-- Script de entrada con manejo de errores de carga -->
+    <script type="text/babel" data-presets="react,typescript" data-type="module">
+        import './index.tsx';
+    </script>
 
     <script>
+        // Sistema de emergencia: Si en 10 segundos no ha cargado, algo salió mal
+        setTimeout(() => {
+            const loader = document.getElementById('loading-screen');
+            if (loader && loader.style.display !== 'none') {
+                console.warn("La carga está tardando demasiado. Verificando errores...");
+            }
+        }, 10000);
+
         window.onerror = function(message, source, lineno, colno, error) {
-            console.error("Error Detectado:", message, "en", source);
+            const loader = document.getElementById('loading-screen');
+            if (loader) loader.style.display = 'none';
+            
             const consoleBox = document.getElementById('error-console');
             if(consoleBox) {
                 consoleBox.style.display = 'block';
                 consoleBox.innerHTML = `
-                    <h3 class="font-bold text-lg mb-2">Error de Ejecución</h3>
-                    <p class="text-sm mb-2">Mensaje: ${message}</p>
-                    <p class="text-xs text-gray-600 mb-4">Archivo: ${source || 'desconocido'} (Línea ${lineno})</p>
-                    <button onclick="window.location.reload(true)" class="bg-red-600 text-white px-4 py-2 rounded text-xs font-bold uppercase">Reiniciar Aplicación</button>
+                    <div class="flex items-center gap-3 mb-4">
+                        <i class="fas fa-exclamation-triangle text-2xl text-red-600"></i>
+                        <h3 class="font-bold text-xl">Error al Iniciar Aplicación</h3>
+                    </div>
+                    <div class="bg-red-100 p-4 rounded font-mono text-sm mb-4 overflow-auto max-h-40">
+                        ${message}<br><br>
+                        <span class="text-xs">Ubicación: ${source}:${lineno}</span>
+                    </div>
+                    <p class="mb-6 text-sm">Este problema suele ocurrir por archivos que no se encuentran o conflictos de versiones en el navegador.</p>
+                    <button onclick="window.location.reload(true)" class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded font-bold uppercase text-xs transition-colors">Forzar Limpieza y Recargar</button>
                 `;
             }
-            const loader = document.getElementById('loading-screen');
-            if (loader) loader.style.display = 'none';
+            return false;
         };
     </script>
-<script type="module" src="/index.tsx"></script>
 </body>
 </html>
