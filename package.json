@@ -10,18 +10,7 @@
   },
   "dependencies": {
     "react": "^19.2.3",
-    "react-dom": "^19.2.3",
-    "./App": "latest",
-    "./components/Navbar": "latest",
-    "./components/Hero": "latest",
-    "./components/Services": "latest",
-    "./components/About": "latest",
-    "./components/ContactForm": "latest",
-    "./components/Footer": "latest",
-    "./components/WhatsAppButton": "latest",
-    "./components/JuridicoView": "latest",
-    "./components/InmobiliarioView": "latest",
-    "./hooks/useScrollReveal": "latest"
+    "react-dom": "^19.2.3"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",

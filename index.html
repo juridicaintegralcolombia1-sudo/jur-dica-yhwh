@@ -29,18 +29,18 @@
         .fade-in.visible { opacity: 1; transform: translateY(0); }
         .glass-header { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
         #loading-screen { position: fixed; inset: 0; background: #0d1b2a; display: flex; align-items: center; justify-content: center; z-index: 9999; transition: opacity 0.5s ease; }
-        #error-console { display: none; position: fixed; top: 10px; left: 10px; right: 10px; background: #fee2e2; border: 1px solid #ef4444; padding: 20px; color: #b91c1c; z-index: 10000; font-family: sans-serif; border-radius: 8px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        #error-console { display: none; position: fixed; top: 10px; left: 10px; right: 10px; background: #fee2e2; border: 1px solid #ef4444; padding: 20px; color: #b91c1c; z-index: 10000; font-family: sans-serif; border-radius: 8px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); overflow-wrap: break-word; }
     </style>
 
     <script async src="https://ga.jspm.io/npm:es-module-shims@1.7.0/dist/es-module-shims.js"></script>
 
-    <!-- IMPORT MAP CORREGIDO: ÚNICAMENTE 18.2.0 -->
     <script type="importmap">
 {
   "imports": {
     "react": "https://esm.sh/react@18.2.0",
     "react-dom": "https://esm.sh/react-dom@18.2.0",
     "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+    "react/jsx-runtime": "https://esm.sh/react@18.2.0/jsx-runtime",
     "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
     "react/": "https://esm.sh/react@^19.2.3/"
   }
@@ -48,6 +48,7 @@
 </script>
     
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<link rel="stylesheet" href="/index.css">
 </head>
 <body class="font-sans text-gray-900 bg-white">
     <div id="loading-screen">
@@ -64,22 +65,21 @@
 
     <script>
         window.onerror = function(message, source, lineno, colno, error) {
-            console.error("Error Global:", message);
+            console.error("Error Detectado:", message, "en", source);
             const consoleBox = document.getElementById('error-console');
             if(consoleBox) {
                 consoleBox.style.display = 'block';
                 consoleBox.innerHTML = `
-                    <h3 class="font-bold text-lg mb-2">Error Crítico al Cargar</h3>
-                    <p class="text-sm mb-4">La aplicación no pudo iniciarse correctamente.</p>
-                    <div class="bg-white/50 p-2 rounded text-[10px] font-mono mb-4">
-                        ${message}<br>en ${source.split('/').pop()}:${lineno}
-                    </div>
-                    <button onclick="window.location.reload(true)" class="bg-red-600 text-white px-4 py-2 rounded text-xs font-bold uppercase">Forzar Recarga (Ctrl+F5)</button>
+                    <h3 class="font-bold text-lg mb-2">Error de Ejecución</h3>
+                    <p class="text-sm mb-2">Mensaje: ${message}</p>
+                    <p class="text-xs text-gray-600 mb-4">Archivo: ${source || 'desconocido'} (Línea ${lineno})</p>
+                    <button onclick="window.location.reload(true)" class="bg-red-600 text-white px-4 py-2 rounded text-xs font-bold uppercase">Reiniciar Aplicación</button>
                 `;
             }
             const loader = document.getElementById('loading-screen');
             if (loader) loader.style.display = 'none';
         };
     </script>
+<script type="module" src="/index.tsx"></script>
 </body>
 </html>

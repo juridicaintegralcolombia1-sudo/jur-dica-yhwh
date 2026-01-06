@@ -3,6 +3,8 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App.tsx';
 
+console.log("Iniciando renderizado de la aplicación...");
+
 const rootElement = document.getElementById('root');
 
 const hideLoader = () => {
@@ -11,6 +13,7 @@ const hideLoader = () => {
     loader.style.opacity = '0';
     setTimeout(() => {
       if (loader.parentNode) loader.remove();
+      console.log("Loader removido exitosamente.");
     }, 500);
   }
 };
@@ -24,15 +27,17 @@ if (rootElement) {
       </React.StrictMode>
     );
     
-    // Solo quitamos el loader si llegamos aquí sin errores catastróficos
-    // Esperamos un momento a que los componentes hijos carguen sus efectos
-    setTimeout(hideLoader, 1500);
+    // Un pequeño retraso para asegurar que el primer renderizado se complete
+    setTimeout(() => {
+      console.log("Renderizado inicial completado.");
+      hideLoader();
+    }, 1000);
     
   } catch (err) {
-    console.error("Error de renderizado inicial:", err);
-    // Si hay error, el window.onerror de index.html lo atrapará
+    console.error("Error fatal en el arranque de React:", err);
+    // Este error será capturado por el window.onerror del HTML
     throw err; 
   }
 } else {
-  console.error("No se encontró el elemento #root");
+  console.error("No se pudo encontrar el contenedor #root en el DOM.");
 }
